@@ -4,10 +4,6 @@ class MoviesController < ApplicationController
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
   
-  def all_ratings
-    @all_ratings = ['G','PG', 'PG-13','R']
-  end
-  
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -15,7 +11,13 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all.order(params[:orderBy])
+    @movies = Movie.all.order(params[:orderBy])#retrieve sorting parameter from URI
+    @all_ratings=[]
+    @movies.each do |movie|
+      if !@all_ratings.include? movie[:rating] 
+        @all_ratings.push(movie[:rating])
+      end
+    end
   end
 
   def new
