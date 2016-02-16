@@ -3,7 +3,11 @@ class MoviesController < ApplicationController
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
-
+  
+  def all_ratings
+    @all_ratings = ['G','PG', 'PG-13','R']
+  end
+  
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -26,10 +30,6 @@ class MoviesController < ApplicationController
 
   def edit
     @movie = Movie.find params[:id]
-  end
-  
-  def sort
-    
   end
   
 
