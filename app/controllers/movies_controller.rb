@@ -11,13 +11,15 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all.order(params[:orderBy])#retrieve sorting parameter from URI
-    @all_ratings=[]
-    @movies.each do |movie|
-      if !@all_ratings.include? movie[:rating] 
-        @all_ratings.push(movie[:rating])
-      end
+    if (params[:ratings])
+      @ratings_desired = params[:ratings].keys
+      #params[:ratings].keys returns array of keys
+      @movies= Movie.where(:rating => @ratings_desired).order(params[:orderBy])
+    else
+      @ratings_desired = Movie.get_ratings#retrieves list of all ratings
+      @movies = Movie.all.order(params[:orderBy])#retrieve sorting parameter from URI
     end
+    @all_ratings=Movie.get_ratings
   end
 
   def new
